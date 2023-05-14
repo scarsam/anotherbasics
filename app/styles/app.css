@@ -62,9 +62,9 @@ shop-pay-button {
     font-variant-ligatures: none;
   }
 
-  body {
+  /* body {
     @apply border-primary/10 bg-contrast text-primary/90 antialiased;
-  }
+  } */
 
   html {
     scroll-padding-top: 10rem;

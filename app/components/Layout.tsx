@@ -21,13 +21,24 @@ import {
   CartLoading,
   Link,
 } from '~/components';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useMotionValueEvent,
+  AnimatePresence,
+} from 'framer-motion';
+
 import {useParams, Form, Await, useMatches} from '@remix-run/react';
 import {useWindowScroll} from 'react-use';
 import {Disclosure} from '@headlessui/react';
 import {Suspense, useEffect, useMemo} from 'react';
 import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
+import {useCurrentDate} from '~/hooks/useCurrentDate';
 import type {LayoutData} from '../root';
+import Logo from '../../public/anotherbasics-logo.svg';
 
 export function Layout({
   children,
@@ -38,7 +49,7 @@ export function Layout({
 }) {
   return (
     <>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen bg-white">
         <div className="">
           <a href="#mainContent" className="sr-only">
             Skip to content
@@ -188,7 +199,7 @@ function MobileHeader({
         isHome
           ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
           : 'bg-contrast/80 text-primary'
-      } flex lg:hidden items-center h-nav sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`}
+      } flex lg:hidden items-center h-nav sticky backdrop-blur-lg z-40 top-0 justify-center w-full leading-none gap-4 px-4 md:px-8`}
     >
       <div className="flex items-center justify-start w-full gap-4">
         <button
@@ -255,23 +266,59 @@ function DesktopHeader({
 }) {
   const params = useParams();
   const {y} = useWindowScroll();
+  const {currentDate} = useCurrentDate();
+  const {scrollY, scrollYProgress} = useScroll();
+  // console.log('y', scrollY);
+  // console.log(y);
+  // console.log(scrollY);
+  const height = useTransform(scrollY, [0, 100], ['20vh', '10vh']);
+  const width = useTransform(scrollY, [0, 100], ['90wv', '15vw']);
+  const top = useTransform(scrollY, [0, 100], ['101%', '50%']);
+  const transform = useTransform(scrollY, [0, 100], ['0', '-50%']);
+  const backgroundBlur = useTransform(scrollYProgress, (v) =>
+    v <= 20 ? `blur(${v * 100}px)` : `blur(20px)`,
+  );
+  const borderBottom = useTransform(scrollYProgress, (v) => (v <= 20 ? 0 : 1));
+  // const;
+  // const height = y > 64 ? '64px' : '228px';
+  // const width = y > 64 ? '150px' : '1400px';
+
+  // console.log(backgroundBlur);
+  // console.log(scroll)
   return (
-    <header
+    <motion.header
+      // animate={{height: `${height}`}}
       role="banner"
-      className={`${
-        isHome
-          ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
-          : 'bg-contrast/80 text-primary'
-      } ${
-        !isHome && y > 50 && ' shadow-lightHeader'
-      } hidden h-nav lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`}
+      // initial={{height: '228px'}}
+      // animate={{height: '64px'}}
+      // layout="size"
+      // style={{height}}
+      // style={{height: `${height}px`}}
+      style={{backdropFilter: backgroundBlur}}
+      className={`${isHome ? '' : 'bg-contrast/80 text-primary'} ${
+        !isHome && 10 > 50 && ' shadow-lightHeader'
+      } py-2 hidden lg:flex items-center fixed flex-col transition duration-300 z-40 top-0 w-full leading-none`}
     >
-      <div className="flex gap-12">
-        <Link className="font-bold" to="/" prefetch="intent">
-          {title}
-        </Link>
-        <nav className="flex gap-8">
-          {/* Top level menu items */}
+      <Link className="relative" to="/" prefetch="intent">
+        {/* {title} */}
+        <motion.img
+          // initial={{width: '100%'}}
+          // animate={{width: '150px'}}
+          // initial={{y: '0', width: '150px'}}
+          style={{width}}
+          src={Logo}
+          className="object-cover object-center w-full pt-2 pb-4"
+          alt="Another Basics Logo"
+        />
+      </Link>
+      <motion.nav
+        style={{top, y: transform}}
+        className="flex w-[90vw] absolute -bottom-5 justify-between items-center"
+      >
+        <p className="text-base">{currentDate}</p>
+
+        {/* Top level menu items */}
+        <div className="flex">
           {(menu?.items || []).map((item) => (
             <Link
               key={item.id}
@@ -285,10 +332,14 @@ function DesktopHeader({
               {item.title}
             </Link>
           ))}
-        </nav>
-      </div>
+          <div className="pl-2">
+            <CartCount isHome={isHome} openCart={openCart} />
+          </div>
+        </div>
+      </motion.nav>
+
       <div className="flex items-center gap-1">
-        <Form
+        {/* <Form
           method="get"
           action={params.lang ? `/${params.lang}/search` : '/search'}
           className="flex items-center gap-2"
@@ -310,11 +361,10 @@ function DesktopHeader({
           >
             <IconSearch />
           </button>
-        </Form>
-        <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
-        <CartCount isHome={isHome} openCart={openCart} />
+        </Form> */}
+        {/* <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" /> */}
       </div>
-    </header>
+    </motion.header>
   );
 }
 
@@ -367,36 +417,14 @@ function Badge({
 }) {
   const isHydrated = useIsHydrated();
 
-  const BadgeCounter = useMemo(
-    () => (
-      <>
-        <IconBag />
-        <div
-          className={`${
-            dark
-              ? 'text-primary bg-contrast dark:text-contrast dark:bg-primary'
-              : 'text-contrast bg-primary'
-          } absolute bottom-1 right-1 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px`}
-        >
-          <span>{count || 0}</span>
-        </div>
-      </>
-    ),
-    [count, dark],
-  );
+  const BadgeCounter = useMemo(() => <p>cart {count || 0}</p>, [count, dark]);
 
   return isHydrated ? (
-    <button
-      onClick={openCart}
-      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
-    >
+    <button onClick={openCart} className="relative flex focus:ring-primary/5">
       {BadgeCounter}
     </button>
   ) : (
-    <Link
-      to="/cart"
-      className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
-    >
+    <Link to="/cart" className="relative flex focus:ring-primary/5">
       {BadgeCounter}
     </Link>
   );
