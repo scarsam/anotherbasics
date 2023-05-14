@@ -33,7 +33,7 @@ import {
 import {useParams, Form, Await, useMatches} from '@remix-run/react';
 import {useWindowScroll} from 'react-use';
 import {Disclosure} from '@headlessui/react';
-import {Suspense, useEffect, useMemo} from 'react';
+import {Suspense, useEffect, useMemo, useRef, useState} from 'react';
 import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
 import {useCurrentDate} from '~/hooks/useCurrentDate';
@@ -47,9 +47,17 @@ export function Layout({
   children: React.ReactNode;
   layout: LayoutData;
 }) {
+  const [paddingTop, setPaddingTop] = useState(0);
+
+  useEffect(() => {
+    setPaddingTop(
+      document.getElementById('header')?.getBoundingClientRect()?.height || 0,
+    );
+  }, []);
+
   return (
     <>
-      <div className="flex flex-col min-h-screen bg-white">
+      <div style={{paddingTop}} className="flex flex-col min-h-screen bg-white">
         <div className="">
           <a href="#mainContent" className="sr-only">
             Skip to content
@@ -265,36 +273,27 @@ function DesktopHeader({
   title: string;
 }) {
   const params = useParams();
-  const {y} = useWindowScroll();
   const {currentDate} = useCurrentDate();
   const {scrollY, scrollYProgress} = useScroll();
-  // console.log('y', scrollY);
-  // console.log(y);
-  // console.log(scrollY);
-  const height = useTransform(scrollY, [0, 100], ['20vh', '10vh']);
   const width = useTransform(scrollY, [0, 100], ['90wv', '15vw']);
   const top = useTransform(scrollY, [0, 100], ['101%', '50%']);
   const transform = useTransform(scrollY, [0, 100], ['0', '-50%']);
   const backgroundBlur = useTransform(scrollYProgress, (v) =>
-    v <= 20 ? `blur(${v * 100}px)` : `blur(20px)`,
+    v * 100 <= 7.5 ? `blur(${v * 100}px)` : `blur(7.5px)`,
   );
-  const borderBottom = useTransform(scrollYProgress, (v) => (v <= 20 ? 0 : 1));
-  // const;
-  // const height = y > 64 ? '64px' : '228px';
-  // const width = y > 64 ? '150px' : '1400px';
+  const borderBottom = useTransform(scrollYProgress, (v) =>
+    v * 100 <= 20 ? 0 : 1,
+  );
 
-  // console.log(backgroundBlur);
-  // console.log(scroll)
   return (
     <motion.header
-      // animate={{height: `${height}`}}
+      id="header"
       role="banner"
-      // initial={{height: '228px'}}
-      // animate={{height: '64px'}}
-      // layout="size"
-      // style={{height}}
-      // style={{height: `${height}px`}}
-      style={{backdropFilter: backgroundBlur}}
+      style={{
+        backdropFilter: backgroundBlur,
+        borderBottomWidth: borderBottom,
+        borderBottomColor: 'rgba(28, 7, 66, 0.2)',
+      }}
       className={`${isHome ? '' : 'bg-contrast/80 text-primary'} ${
         !isHome && 10 > 50 && ' shadow-lightHeader'
       } py-2 hidden lg:flex items-center fixed flex-col transition duration-300 z-40 top-0 w-full leading-none`}
@@ -302,9 +301,6 @@ function DesktopHeader({
       <Link className="relative" to="/" prefetch="intent">
         {/* {title} */}
         <motion.img
-          // initial={{width: '100%'}}
-          // animate={{width: '150px'}}
-          // initial={{y: '0', width: '150px'}}
           style={{width}}
           src={Logo}
           className="object-cover object-center w-full pt-2 pb-4"
