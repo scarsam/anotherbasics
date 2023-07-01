@@ -38,7 +38,8 @@ import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
 import {useCurrentDate} from '~/hooks/useCurrentDate';
 import type {LayoutData} from '../root';
-import Logo from '../../public/anotherbasics-logo.svg';
+import Logo from '../../public/anydays-logo.svg';
+import Smile from '../../public/smile-icon.svg';
 
 export function Layout({
   children,
@@ -57,7 +58,7 @@ export function Layout({
 
   return (
     <>
-      <div style={{paddingTop}} className="flex flex-col min-h-screen bg-white">
+      <div className="flex flex-col min-h-screen bg-white">
         <div className="">
           <a href="#mainContent" className="sr-only">
             Skip to content
@@ -261,6 +262,45 @@ function MobileHeader({
   );
 }
 
+const MarqueeContent = () => {
+  return (
+    <span className="flex justify-between items-center">
+      <p className="px-8 whitespace-nowrap">
+        FREE SAME-DAY SHIPPING ON ALL ORDERS
+      </p>
+      <img
+        className="animate-[spin_4s_linear_infinite] px-8"
+        src={Smile}
+        alt="banner-icon"
+      />
+      <p className="px-8 whitespace-nowrap">
+        FREE SAME-DAY SHIPPING ON ALL ORDERS
+      </p>
+      <img
+        className="animate-[spin_4s_linear_infinite] px-8"
+        src={Smile}
+        alt="banner-icon"
+      />
+      <p className="px-8 whitespace-nowrap">
+        FREE SAME-DAY SHIPPING ON ALL ORDERS
+      </p>
+      <img
+        className="animate-[spin_4s_linear_infinite] px-8"
+        src={Smile}
+        alt="banner-icon"
+      />
+      <p className="px-8 whitespace-nowrap">
+        FREE SAME-DAY SHIPPING ON ALL ORDERS
+      </p>
+      <img
+        className="animate-[spin_4s_linear_infinite] px-8"
+        src={Smile}
+        alt="banner-icon"
+      />
+    </span>
+  );
+};
+
 function DesktopHeader({
   isHome,
   menu,
@@ -286,30 +326,40 @@ function DesktopHeader({
   );
 
   return (
-    <motion.header
-      id="header"
-      role="banner"
-      style={{
-        backdropFilter: backgroundBlur,
-        borderBottomWidth: borderBottom,
-        borderBottomColor: 'rgba(28, 7, 66, 0.2)',
-      }}
-      className={`${isHome ? '' : 'bg-contrast/80 text-primary'} ${
-        !isHome && 10 > 50 && ' shadow-lightHeader'
-      } py-2 hidden lg:flex items-center fixed flex-col transition duration-300 z-40 top-0 w-full leading-none`}
-    >
-      <Link className="relative" to="/" prefetch="intent">
-        {/* {title} */}
-        <motion.img
-          style={{width}}
-          src={Logo}
-          className="object-cover object-center w-full pt-2 pb-4"
-          alt="Another Basics Logo"
-        />
-      </Link>
-      <motion.nav
-        style={{top, y: transform}}
-        className="flex w-[90vw] absolute -bottom-5 justify-between items-center"
+    <>
+      <div className="bg-[#E1C8FF] h-[40px] flex justify-between items-center sticky top-0 z-40">
+        <div className="animate-marquee">
+          <MarqueeContent />
+        </div>
+        <div className="animate-marquee2">
+          <MarqueeContent />
+        </div>
+      </div>
+      <header
+        id="header"
+        role="banner"
+        // style={{
+        //   backdropFilter: backgroundBlur,
+        //   borderBottomWidth: borderBottom,
+        //   borderBottomColor: 'rgba(28, 7, 66, 0.2)',
+        // }}
+        className={`${isHome ? '' : 'bg-contrast/80 text-primary'} ${
+          !isHome && 10 > 50 && ' shadow-lightHeader'
+        } py-2 hidden lg:flex items-center flex-col transition duration-300 top-0 w-full leading-none`}
+      >
+        <Link className="relative w-[95vw]" to="/" prefetch="intent">
+          {/* <h1 className="text-[#1C0742] w-full">{title}</h1> */}
+          <img
+            // style={{width}}
+            src={Logo}
+            className="object-cover object-center w-full pt-2 pb-4"
+            alt="Anydays Logo"
+          />
+        </Link>
+      </header>
+      <nav
+        // style={{top, y: transform}}
+        className="flex w-[95vw] -bottom-5 justify-between items-center sticky top-[40px] m-auto z-40"
       >
         <p className="text-base">{currentDate}</p>
 
@@ -332,35 +382,8 @@ function DesktopHeader({
             <CartCount isHome={isHome} openCart={openCart} />
           </div>
         </div>
-      </motion.nav>
-
-      <div className="flex items-center gap-1">
-        {/* <Form
-          method="get"
-          action={params.lang ? `/${params.lang}/search` : '/search'}
-          className="flex items-center gap-2"
-        >
-          <Input
-            className={
-              isHome
-                ? 'focus:border-contrast/20 dark:focus:border-primary/20'
-                : 'focus:border-primary/20'
-            }
-            type="search"
-            variant="minisearch"
-            placeholder="Search"
-            name="q"
-          />
-          <button
-            type="submit"
-            className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
-          >
-            <IconSearch />
-          </button>
-        </Form> */}
-        {/* <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" /> */}
-      </div>
-    </motion.header>
+      </nav>
+    </>
   );
 }
 

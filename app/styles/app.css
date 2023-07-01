@@ -60,6 +60,8 @@ shop-pay-button {
 @layer base {
   * {
     font-variant-ligatures: none;
+    font-family: 'Neue Haas Unica Pro', 'Gill Sans', 'Gill Sans MT', 'Calibri',
+      'Trebuchet MS', sans-serif;
   }
 
   /* body {
