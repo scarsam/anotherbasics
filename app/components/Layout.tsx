@@ -40,6 +40,7 @@ import {useCurrentDate} from '~/hooks/useCurrentDate';
 import type {LayoutData} from '../root';
 import Logo from '../../public/anydays-logo.svg';
 import Smile from '../../public/smile-icon.svg';
+import Eye from '../../public/eye-nav.svg';
 
 export function Layout({
   children,
@@ -264,36 +265,36 @@ function MobileHeader({
 
 const MarqueeContent = () => {
   return (
-    <span className="flex justify-between items-center">
-      <p className="px-8 whitespace-nowrap">
+    <span className="flex justify-between items-center w-max">
+      <p className="px-24 whitespace-nowrap">
         FREE SAME-DAY SHIPPING ON ALL ORDERS
       </p>
       <img
-        className="animate-[spin_4s_linear_infinite] px-8"
+        className="animate-[spin_4s_linear_infinite] px-24"
         src={Smile}
         alt="banner-icon"
       />
-      <p className="px-8 whitespace-nowrap">
+      <p className="px-24 whitespace-nowrap">
         FREE SAME-DAY SHIPPING ON ALL ORDERS
       </p>
       <img
-        className="animate-[spin_4s_linear_infinite] px-8"
+        className="animate-[spin_4s_linear_infinite] px-24"
         src={Smile}
         alt="banner-icon"
       />
-      <p className="px-8 whitespace-nowrap">
+      <p className="px-24 whitespace-nowrap">
         FREE SAME-DAY SHIPPING ON ALL ORDERS
       </p>
       <img
-        className="animate-[spin_4s_linear_infinite] px-8"
+        className="animate-[spin_4s_linear_infinite] px-24"
         src={Smile}
         alt="banner-icon"
       />
-      <p className="px-8 whitespace-nowrap">
+      <p className="px-24 whitespace-nowrap">
         FREE SAME-DAY SHIPPING ON ALL ORDERS
       </p>
       <img
-        className="animate-[spin_4s_linear_infinite] px-8"
+        className="animate-[spin_4s_linear_infinite] px-24"
         src={Smile}
         alt="banner-icon"
       />
@@ -327,11 +328,11 @@ function DesktopHeader({
 
   return (
     <>
-      <div className="bg-[#E1C8FF] h-[40px] flex justify-between items-center sticky top-0 z-40">
+      <div className="bg-[#E1C8FF] h-[40px] flex justify-between items-center sticky top-0 z-40 overflow-hidden">
         <div className="animate-marquee">
           <MarqueeContent />
         </div>
-        <div className="animate-marquee2">
+        <div className="animate-marquee2 absolute top-1/2 left-0">
           <MarqueeContent />
         </div>
       </div>
@@ -347,24 +348,23 @@ function DesktopHeader({
           !isHome && 10 > 50 && ' shadow-lightHeader'
         } py-2 hidden lg:flex items-center flex-col transition duration-300 top-0 w-full leading-none`}
       >
-        <Link className="relative w-[95vw]" to="/" prefetch="intent">
-          {/* <h1 className="text-[#1C0742] w-full">{title}</h1> */}
-          <img
-            // style={{width}}
-            src={Logo}
-            className="object-cover object-center w-full pt-2 pb-4"
-            alt="Anydays Logo"
-          />
-        </Link>
+        <img
+          // style={{width}}
+          src={Logo}
+          className=" w-[95vw] pt-2 pb-4"
+          alt="Anydays Logo"
+        />
       </header>
-      <nav
-        // style={{top, y: transform}}
-        className="flex w-[95vw] -bottom-5 justify-between items-center sticky top-[40px] m-auto z-40"
+      <Section
+        as="nav"
+        display="flex"
+        padding="x"
+        className="-bottom-5 justify-between items-center sticky top-[40px] m-auto z-40"
       >
-        <p className="text-base">{currentDate}</p>
+        <img src={Eye} alt="eye icon" />
 
         {/* Top level menu items */}
-        <div className="flex">
+        <div className="flex py-4">
           {(menu?.items || []).map((item) => (
             <Link
               key={item.id}
@@ -372,7 +372,9 @@ function DesktopHeader({
               target={item.target}
               prefetch="intent"
               className={({isActive}) =>
-                isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
+                isActive
+                  ? 'pb-1 px-3 text-sm border-b -mb-px uppercase'
+                  : 'pb-1 px-3 text-sm uppercase'
               }
             >
               {item.title}
@@ -382,7 +384,7 @@ function DesktopHeader({
             <CartCount isHome={isHome} openCart={openCart} />
           </div>
         </div>
-      </nav>
+      </Section>
     </>
   );
 }
@@ -436,7 +438,10 @@ function Badge({
 }) {
   const isHydrated = useIsHydrated();
 
-  const BadgeCounter = useMemo(() => <p>cart {count || 0}</p>, [count, dark]);
+  const BadgeCounter = useMemo(
+    () => <p className="text-sm">BAG {count || 0}</p>,
+    [count],
+  );
 
   return isHydrated ? (
     <button onClick={openCart} className="relative flex focus:ring-primary/5">

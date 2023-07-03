@@ -1,7 +1,13 @@
 import {defer, type LoaderArgs} from '@shopify/remix-oxygen';
 import {Suspense} from 'react';
 import {Await, useLoaderData} from '@remix-run/react';
-import {ProductSwimlane, FeaturedCollections, Hero} from '~/components';
+import {
+  ProductSwimlane,
+  FeaturedCollections,
+  Hero,
+  Section,
+  Button,
+} from '~/components';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
 import {seoPayload} from '~/lib/seo.server';
@@ -12,6 +18,8 @@ import type {
 import {AnalyticsPageType} from '@shopify/hydrogen';
 import {routeHeaders, CACHE_SHORT} from '~/data/cache';
 import {type CollectionHero} from '~/components/Hero';
+import PlaceholderImg from '../../public/placeholder-img.jpeg';
+import ButtonEyeClosedIcon from '../../public/eye-closed.svg';
 
 interface HomeSeoData {
   shop: {
@@ -120,6 +128,32 @@ export default function Homepage() {
       {primaryHero && (
         <Hero {...primaryHero} height="full" top loading="eager" />
       )}
+
+      <Section
+        display="grid"
+        padding="all"
+        className="grid-cols-2 content-center py-12"
+      >
+        <article className="flex flex-col justify-center items-start">
+          <p className="mb-8 max-w-prose-narrow">
+            Simple, planet-friendly underwear with highest quality and comfort.
+            We focus on design and material over color and branding.
+          </p>
+          <Button className="flex">
+            Shop
+            <img
+              className="pl-3"
+              src={ButtonEyeClosedIcon}
+              alt="button eye closed"
+            />
+          </Button>
+        </article>
+        <img
+          className="ml-auto"
+          src={PlaceholderImg}
+          alt="underwear in bathroom"
+        />
+      </Section>
 
       {featuredProducts && (
         <Suspense>

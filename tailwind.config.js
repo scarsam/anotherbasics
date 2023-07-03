@@ -25,8 +25,8 @@ export default {
           '100%': {transform: 'translateX(-100%)'},
         },
         marquee2: {
-          '0%': {transform: 'translateX(100%)'},
-          '100%': {transform: 'translateX(0%)'},
+          '0%': {transform: 'translateX(100%) translateY(-50%)'},
+          '100%': {transform: 'translateX(0%) translateY(-50%)'},
         },
       },
       colors: {
