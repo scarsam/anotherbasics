@@ -20,6 +20,8 @@ import {routeHeaders, CACHE_SHORT} from '~/data/cache';
 import {type CollectionHero} from '~/components/Hero';
 import PlaceholderImg from '../../public/placeholder-img.jpeg';
 import ButtonEyeClosedIcon from '../../public/eye-closed.svg';
+import FlowerImg from '../../public/flowers.png';
+import TreeImg from '../../public/tree.png';
 
 interface HomeSeoData {
   shop: {
@@ -132,9 +134,9 @@ export default function Homepage() {
       <Section
         display="grid"
         padding="all"
-        className="grid-cols-2 content-center py-12"
+        className="grid-cols-2 content-center my-16"
       >
-        <article className="flex flex-col justify-center items-start">
+        <article className="flex flex-col justify-center items-start relative">
           <p className="mb-8 max-w-prose-narrow">
             Simple, planet-friendly underwear with highest quality and comfort.
             We focus on design and material over color and branding.
@@ -148,11 +150,101 @@ export default function Homepage() {
             />
           </Button>
         </article>
+        <span className="relative">
+          <img
+            className="absolute bottom-0 -left-10"
+            src={FlowerImg}
+            alt="flowers"
+          />
+          <img
+            className="ml-auto h-[85vh] w-auto"
+            src={PlaceholderImg}
+            alt="underwear in bathroom"
+          />
+        </span>
+      </Section>
+
+      <Section display="flex" padding="all" className="content-center my-16">
         <img
-          className="ml-auto"
+          className="h-[65vh] w-auto"
           src={PlaceholderImg}
           alt="underwear in bathroom"
         />
+        <article className="flex flex-col justify-center items-start relative ml-24">
+          <h2 className="text-xl pb-6">One style, one color</h2>
+          <p className="mb-8 text-md max-w-prose">
+            Our first style is the Boxer Short made for comfort and everyday
+            use. A loose fit designed by expert pattern-makers in Sweden & New
+            York. Perfected through multiple rounds of testing and feedback.
+          </p>
+          <Button className="flex">
+            Shop
+            <img
+              className="pl-3"
+              src={ButtonEyeClosedIcon}
+              alt="button eye closed"
+            />
+          </Button>
+        </article>
+      </Section>
+
+      <Section display="flex" padding="all" className="content-center my-16">
+        <article className="flex flex-col justify-center items-start relative ml-24">
+          <h2 className="text-xl pb-6">Thoughtful Comfort</h2>
+          <p className="mb-8 text-md max-w-prose">
+            Obsession over materials led us to believe we found the perfect
+            balance of comfort, quality and sustainability.
+          </p>
+        </article>
+        <img
+          className="h-[65vh] w-auto ml-auto"
+          src={PlaceholderImg}
+          alt="underwear in bathroom"
+        />
+      </Section>
+
+      <Section
+        display="flex"
+        padding="all"
+        className="content-center justify-center items-center my-16"
+      >
+        <img src={TreeImg} alt="underwear in bathroom" />
+        <article className="flex flex-col justify-center items-start relative ml-24">
+          <h2 className="text-xl pb-6">Lenzing Tencel™</h2>
+          <p className="mb-8 text-md max-w-prose">
+            Our underwear are made from 95% Lenzing Tencel™. This is a
+            plant-based biodegradable fabric that uses 90% less water to produce
+            than cotton. It&apos;s wood is sourced from sustainably managed
+            forests, ensuring responsible forestry practices.
+          </p>
+          <a href="/">Learn about our sustainability actions.</a>
+        </article>
+      </Section>
+
+      <Section
+        display="flex"
+        padding="all"
+        className="content-center justify-center items-center my-16 text-center flex-col"
+      >
+        <p className="text-sm max-w-prose font-mono">
+          &quot;finally underwear that are just good looking&quot; - happy
+          girlfriend
+        </p>
+        <a href="/">View all reviews</a>
+      </Section>
+
+      <Section
+        display="flex"
+        padding="all"
+        className="content-center justify-center my-16 flex-col"
+      >
+        <h2 className="text-4xl">Meet our Boxer Shorts</h2>
+        <p className="max-w-prose">
+          Our first style (more are coming!). Designed to be the perfect
+          lounger, expect a relaxed fit and comfort all day. Comes in black, so
+          you only worry about size. Made with Lenzing Tencel, making them one
+          of the most sustainable underwear on the market.
+        </p>
       </Section>
 
       {featuredProducts && (
@@ -161,11 +253,7 @@ export default function Homepage() {
             {({products}) => {
               if (!products?.nodes) return <></>;
               return (
-                <ProductSwimlane
-                  products={products.nodes}
-                  title="Featured Products"
-                  count={4}
-                />
+                <ProductSwimlane products={products.nodes} title="" count={4} />
               );
             }}
           </Await>
@@ -271,7 +359,7 @@ export const HOMEPAGE_FEATURED_PRODUCTS_QUERY = `#graphql
   ${PRODUCT_CARD_FRAGMENT}
   query homepageFeaturedProducts($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
-    products(first: 8) {
+    products(first: 3) {
       nodes {
         ...ProductCard
       }
