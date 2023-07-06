@@ -233,20 +233,6 @@ export default function Homepage() {
         <a href="/">View all reviews</a>
       </Section>
 
-      <Section
-        display="flex"
-        padding="all"
-        className="content-center justify-center my-16 flex-col"
-      >
-        <h2 className="text-4xl">Meet our Boxer Shorts</h2>
-        <p className="max-w-prose">
-          Our first style (more are coming!). Designed to be the perfect
-          lounger, expect a relaxed fit and comfort all day. Comes in black, so
-          you only worry about size. Made with Lenzing Tencel, making them one
-          of the most sustainable underwear on the market.
-        </p>
-      </Section>
-
       {featuredProducts && (
         <Suspense>
           <Await resolve={featuredProducts}>
@@ -271,7 +257,7 @@ export default function Homepage() {
         </Suspense>
       )}
 
-      {featuredCollections && (
+      {/* {featuredCollections && (
         <Suspense>
           <Await resolve={featuredCollections}>
             {({collections}) => {
@@ -285,7 +271,7 @@ export default function Homepage() {
             }}
           </Await>
         </Suspense>
-      )}
+      )} */}
 
       {tertiaryHero && (
         <Suspense fallback={<Hero {...skeletons[2]} />}>

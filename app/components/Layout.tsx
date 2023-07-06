@@ -464,19 +464,28 @@ function Footer({menu}: {menu?: EnhancedMenu}) {
 
   return (
     <Section
-      divider={isHome ? 'none' : 'top'}
+      display="flex"
+      // divider="top"
+      padding="all"
       as="footer"
       role="contentinfo"
-      className={`grid min-h-[25rem] items-start grid-flow-row w-full gap-6 py-8 px-6 md:px-8 lg:px-12 md:gap-8 lg:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-${itemsCount}
-        bg-primary dark:bg-contrast dark:text-primary text-contrast overflow-hidden`}
+      // className={`grid min-h-[25rem] bg-white overflow-hidden border-top`}
     >
-      <FooterMenu menu={menu} />
-      <CountrySelector />
-      <div
-        className={`self-end pt-8 opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
-      >
-        &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
-        Licensed Open Source project.
+      <div className="border-black border-t w-full">
+        <img
+          // style={{width}}
+          src={Logo}
+          className=" w-[95vw] py-10"
+          alt="Anydays Logo"
+        />
+        <FooterMenu menu={menu} />
+        {/* <CountrySelector /> */}
+        {/* <div
+          className={`self-end pt-8 opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
+        >
+          &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
+          Licensed Open Source project.
+        </div> */}
       </div>
     </Section>
   );
@@ -505,44 +514,68 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
   };
 
   return (
-    <>
-      {(menu?.items || []).map((item: EnhancedMenuItem) => (
-        <section key={item.id} className={styles.section}>
-          <Disclosure>
-            {({open}) => (
-              <>
-                <Disclosure.Button className="text-left md:cursor-default">
-                  <Heading className="flex justify-between" size="lead" as="h3">
-                    {item.title}
-                    {item?.items?.length > 0 && (
-                      <span className="md:hidden">
-                        <IconCaret direction={open ? 'up' : 'down'} />
-                      </span>
-                    )}
-                  </Heading>
-                </Disclosure.Button>
-                {item?.items?.length > 0 ? (
-                  <div
-                    className={`${
-                      open ? `max-h-48 h-fit` : `max-h-0 md:max-h-fit`
-                    } overflow-hidden transition-all duration-300`}
-                  >
-                    <Suspense data-comment="This suspense fixes a hydration bug in Disclosure.Panel with static prop">
-                      <Disclosure.Panel static>
-                        <nav className={styles.nav}>
-                          {item.items.map((subItem) => (
-                            <FooterLink key={subItem.id} item={subItem} />
-                          ))}
-                        </nav>
-                      </Disclosure.Panel>
-                    </Suspense>
-                  </div>
-                ) : null}
-              </>
-            )}
-          </Disclosure>
-        </section>
-      ))}
-    </>
+    <div className="grid grid-cols-3 justify-between">
+      <div className="flex-auto">
+        {(menu?.items || []).map((item: EnhancedMenuItem) => (
+          <section key={item.id} className={styles.section}>
+            <Disclosure>
+              {({open}) => (
+                <>
+                  <Disclosure.Button className="text-left md:cursor-default">
+                    <Text
+                      className="flex justify-between pb-2"
+                      size="lead"
+                      as="h3"
+                    >
+                      {item.title}
+                      {item?.items?.length > 0 && (
+                        <span className="md:hidden">
+                          <IconCaret direction={open ? 'up' : 'down'} />
+                        </span>
+                      )}
+                    </Text>
+                  </Disclosure.Button>
+                  {item?.items?.length > 0 ? (
+                    <div
+                      className={`${
+                        open ? `max-h-48 h-fit` : `max-h-0 md:max-h-fit`
+                      } overflow-hidden transition-all duration-300`}
+                    >
+                      <Suspense data-comment="This suspense fixes a hydration bug in Disclosure.Panel with static prop">
+                        <Disclosure.Panel static>
+                          <nav className={styles.nav}>
+                            {item.items.map((subItem) => (
+                              <FooterLink key={subItem.id} item={subItem} />
+                            ))}
+                          </nav>
+                        </Disclosure.Panel>
+                      </Suspense>
+                    </div>
+                  ) : null}
+                </>
+              )}
+            </Disclosure>
+          </section>
+        ))}
+      </div>
+      <Text className="flex flex-1 justify-between pb-2" size="lead">
+        Instagram+
+      </Text>
+      <label className="flex items-start flex-col">
+        <Text className="flex justify-between pb-2" size="lead">
+          Newsletter
+        </Text>
+        <span className="flex w-full">
+          <input
+            className="border-b border-black border-t-0 border-l-0 border-r-0 w-full focus:ring-0"
+            type="text"
+            placeholder="Enter your email"
+          />
+          <button className="bg-white border-b border-black border-t-0 border-l-0 border-r-0">
+            Subscribe
+          </button>
+        </span>
+      </label>
+    </div>
   );
 }
