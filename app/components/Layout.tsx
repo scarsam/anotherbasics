@@ -567,7 +567,7 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
         </Text>
         <span className="flex w-full">
           <input
-            className="border-b border-black border-t-0 border-l-0 border-r-0 w-full focus:ring-0"
+            className="border-b border-black border-t-0 border-l-0 border-r-0 w-full focus:ring-0 px-0 focus:border-black"
             type="text"
             placeholder="Enter your email"
           />

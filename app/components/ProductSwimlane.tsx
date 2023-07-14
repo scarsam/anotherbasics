@@ -23,7 +23,7 @@ export function ProductSwimlane({
         sustainable underwear on the market.
       </p>
       <img
-        className="max-h-[500px]"
+        className="max-h-[500px] w-full object-cover"
         src="https://placehold.co/2000x500"
         alt="placeholder img"
       />
